@@ -1,9 +1,16 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { getFilteredContacts } from 'redux/selectors';
+import { addContact } from 'redux/contactsSlice';
 import { Button, Form, Input, Label } from './ContactForm.styled';
 
-const ContactForm = ({ createContact }) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const contacts = useSelector(getFilteredContacts);
+  const dispatch = useDispatch();
 
   // зміна значень інпутів
   const handleChange = ({ target }) => {
@@ -25,8 +32,18 @@ const ContactForm = ({ createContact }) => {
   const handleSubmit = event => {
     event.preventDefault();
 
+    const isContactExist = contacts.some(
+      contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
+    );
+
+    // Проверяет, существует ли контакт с таким же именем в списке контактов. Если контакт уже существует, выводится предупреждение.
+    if (isContactExist) {
+      alert(`${name} is already in contacts`);
+      return;
+    }
+
     //виклик з App з передачею нового контакту
-    createContact({ name, number });
+    dispatch(addContact({ name, number }));
     setName('');
     setNumber('');
   };
