@@ -24,7 +24,15 @@ export const App = () => {
         {contacts.length > 0 ? (
           <Filter />
         ) : (
-          <div>Your phonebook is empty. Add first contact!</div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              color: 'white',
+            }}
+          >
+            Your phonebook is empty. Add first contact!
+          </div>
         )}
         {contacts.length > 0 && <ContactList />}
       </Section>
