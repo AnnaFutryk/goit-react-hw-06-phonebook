@@ -1,7 +1,21 @@
-import PropTypes from 'prop-types';
+import { nanoid } from '@reduxjs/toolkit';
+import { useSelector, useDispatch } from 'react-redux';
+import { getFilter } from 'redux/selectors';
+import { changeFilter } from 'redux/filterSlice';
 import { Input, Label } from './Filter.styled';
 
-const Filter = ({ value, handleChangeFilter }) => {
+const filterInputId = nanoid();
+
+const Filter = () => {
+  const value = useSelector(getFilter);
+  const dispatch = useDispatch();
+
+  const handleChangeFilter = event => {
+    const normalizedValue = event.target.value.toLowerCase();
+
+    dispatch(changeFilter(normalizedValue));
+  };
+
   return (
     <>
       <Label>
@@ -12,15 +26,11 @@ const Filter = ({ value, handleChangeFilter }) => {
           placeholder="Enter contact name"
           value={value}
           onChange={handleChangeFilter}
+          id={filterInputId}
         />
       </Label>
     </>
   );
-};
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  handleChangeFilter: PropTypes.func.isRequired,
 };
 
 export default Filter;
